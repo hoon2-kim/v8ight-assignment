@@ -12,7 +12,7 @@ import {
   PostListQueryDto,
 } from './dto/post.query.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostEntity } from './entities/post.entity';
+import { EPostCategory, PostEntity } from './entities/post.entity';
 import {
   IPostDetailResponse,
   IPostListResponse,
@@ -38,7 +38,8 @@ export class PostsService {
   async findAllPosts(
     postListQueryDto: PostListQueryDto,
   ): Promise<OffsetPageDto<IPostListResponse>> {
-    const { s, s_target, sort, view_period, skip, take } = postListQueryDto;
+    const { s, s_target, sort, view_period, skip, take, category } =
+      postListQueryDto;
 
     const queryRunner = this.postRepository
       .createQueryBuilder('post')
@@ -103,6 +104,26 @@ export class PostsService {
           queryRunner.addOrderBy('post.view', 'DESC');
           break;
         }
+    }
+
+    switch (category) {
+      case EPostCategory.qna:
+        queryRunner.andWhere('post.category = :category', {
+          category: EPostCategory.qna,
+        });
+        break;
+
+      case EPostCategory.inquiry:
+        queryRunner.andWhere('post.category = :category', {
+          category: EPostCategory.inquiry,
+        });
+        break;
+
+      case EPostCategory.notice:
+        queryRunner.andWhere('post.category = :category', {
+          category: EPostCategory.notice,
+        });
+        break;
     }
 
     const [result, total] = await Promise.all([

@@ -1,5 +1,6 @@
 import { IsEnum, IsOptional } from 'class-validator';
 import { OffsetPageOptionDto } from 'src/common/dtos/offsetPage-option.dto';
+import { EPostCategory } from '../entities/post.entity';
 
 export enum ESearchTarget {
   title_author = 'title_author',
@@ -34,4 +35,8 @@ export class PostListQueryDto extends OffsetPageOptionDto {
   @IsOptional()
   @IsEnum(ESearchTarget)
   s_target: ESearchTarget;
+
+  @IsOptional()
+  @IsEnum(EPostCategory)
+  category: EPostCategory;
 }
