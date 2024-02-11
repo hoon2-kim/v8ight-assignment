@@ -46,7 +46,7 @@ export class AuthService {
     return tokens;
   }
 
-  async restore(userId: number, res: Response) {
+  async restore(userId: number, res: Response): Promise<ITokenResponse> {
     const user = await this.usersService.findOneUserByOptions({
       where: { id: userId },
     });
