@@ -83,23 +83,38 @@ export class PostsService {
           break;
         }
         if (view_period === EViewPeriod.year) {
+          // 오늘을 기준으로 고정 일년
+          // queryRunner.andWhere(
+          //   `DATE_FORMAT(post.createdAt, '%Y') = DATE_FORMAT(CURDATE(),'%Y')`,
+          // );
+          // 오늘을 기준으로 일년 전이라면
           queryRunner.andWhere(
-            `DATE_FORMAT(post.createdAt, '%Y') = DATE_FORMAT(CURDATE(),'%Y')`,
+            `DATE_FORMAT(post.createdAt,'%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 YEAR) AND CURDATE()`,
           );
           queryRunner.addOrderBy('post.view', 'DESC');
           break;
         }
         if (view_period === EViewPeriod.month) {
+          // 오늘을 기준으로 고정 한달
+          // queryRunner.andWhere(
+          //   `(DATE_FORMAT(post.createdAt, '%Y-%m')) = DATE_FORMAT(CURDATE(),'%Y-%m')`,
+          // );
+          // 오늘을 기준으로 한달 전이라면
           queryRunner.andWhere(
-            `(DATE_FORMAT(post.createdAt, '%Y-%m')) = DATE_FORMAT(CURDATE(),'%Y-%m')`,
+            `DATE_FORMAT(post.createdAt,'%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(), INTERVAL -1 MONTH) AND CURDATE()`,
           );
           queryRunner.addOrderBy('post.view', 'DESC');
           break;
         }
-        // 오늘을 기준으로 일주일(월요일 시작)
+
         if (view_period === EViewPeriod.week) {
+          // 오늘을 기준으로 고정 일주일(월요일 시작) ex) 2024-02-07이라면 -> 2024-02-05 ~ 2024-02-11
+          // queryRunner.andWhere(
+          //   `YEARWEEK(DATE_FORMAT(post.createdAt, '%Y-%m-%d'),7) = YEARWEEK(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),7)`,
+          // );
+          // 오늘을 기준으로 일주일 전을 조회한다면
           queryRunner.andWhere(
-            `YEARWEEK(DATE_FORMAT(post.createdAt, '%Y-%m-%d'),7) = YEARWEEK(DATE_FORMAT(CURDATE(),'%Y-%m-%d'),7)`,
+            `DATE_FORMAT(post.createdAt,'%Y-%m-%d') BETWEEN DATE_ADD(CURDATE(),INTERVAL -1 WEEK) AND CURDATE()`,
           );
           queryRunner.addOrderBy('post.view', 'DESC');
           break;
