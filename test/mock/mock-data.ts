@@ -11,6 +11,10 @@ import { CreatePostDto } from 'src/posts/dto/create-post.dto';
 import { PostListQueryDto } from 'src/posts/dto/post.query.dto';
 import { UpdatePostDto } from 'src/posts/dto/update-post.dto';
 import { EPostCategory, PostEntity } from 'src/posts/entities/post.entity';
+import {
+  IPostDetailResponse,
+  IPostListResponse,
+} from 'src/posts/interfaces/post.interface';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 
@@ -169,7 +173,7 @@ export const mockPostListRaw = [
     user_id: 3,
     user_nickname: 'test3',
   },
-] as unknown as PostEntity[];
+] as unknown as IPostListResponse[];
 const pageMeta2 = new OffsetPageMetaDto({
   offsetPageOptionDto: new PostListQueryDto(),
   itemCount: mockPostListRaw.length,
@@ -188,7 +192,7 @@ export const mockPostDetail = {
   view: 1,
   user_id: 1,
   user_nickname: 'test',
-} as unknown as PostEntity;
+} as unknown as IPostDetailResponse;
 
 export const mockCreatePostDto: CreatePostDto = {
   category: EPostCategory.notice,
